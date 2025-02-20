@@ -1,8 +1,12 @@
+//
+//  Created by Andrew Jaffe © 2025
+//
+
 import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = ResumeViewModel()
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -14,7 +18,7 @@ struct ContentView: View {
                         }
                     }
                 }
-
+                
                 Section(header: Text("Experience")) {
                     ForEach(viewModel.resume.experience) { experience in
                         ExperienceRow(experience: experience)
@@ -25,14 +29,14 @@ struct ContentView: View {
                             }
                     }
                     .onDelete(perform: viewModel.removeExperience)
-
+                    
                     Button(action: {
                         viewModel.showAddExperience = true
                     }) {
                         Label("Add Experience", systemImage: "plus.circle")
                     }
                 }
-
+                
                 Section(header: Text("Education")) {
                     ForEach(viewModel.resume.education) { education in
                         EducationRow(education: education)
@@ -43,14 +47,14 @@ struct ContentView: View {
                             }
                     }
                     .onDelete(perform: viewModel.removeEducation)
-
+                    
                     Button(action: {
                         viewModel.showAddEducation = true
                     }) {
                         Label("Add Education", systemImage: "plus.circle")
                     }
                 }
-
+                
                 Section(header: Text("Skills")) {
                     NavigationLink(destination: SkillsView(viewModel: viewModel)) {
                         HStack {
@@ -59,7 +63,20 @@ struct ContentView: View {
                         }
                     }
                 }
-
+                Section(header: Text("Appearance")) {
+                    Button(action: {
+                        viewModel.showColorPicker = true
+                    }) {
+                        HStack {
+                            Image(systemName: "paintpalette")
+                            Text("Color Palette")
+                            Spacer()
+                            Text(viewModel.selectedPalette.name)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                
                 Section {
                     Button(action: {
                         viewModel.generatePDF()
@@ -92,6 +109,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $viewModel.showPDFPreview) {
                 EnhancedPDFPreviewView(pdfData: viewModel.generatedPDF!)
+            }
+            .sheet(isPresented: $viewModel.showColorPicker) {
+                ColorPaletteView(viewModel: viewModel)
             }
         }
     }

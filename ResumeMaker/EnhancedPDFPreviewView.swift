@@ -1,3 +1,7 @@
+//
+//  Created by Andrew Jaffe © 2025
+//
+
 import PDFKit
 import SwiftUI
 import UniformTypeIdentifiers
@@ -7,7 +11,7 @@ struct EnhancedPDFPreviewView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showShareSheet = false
     @State private var showExportOptions = false
-
+    
     var body: some View {
         NavigationView {
             PDFPreviewView(pdfData: pdfData)
@@ -18,11 +22,11 @@ struct EnhancedPDFPreviewView: View {
                         Button(action: { showShareSheet = true }) {
                             Label("Share", systemImage: "square.and.arrow.up")
                         }
-
+                        
                         Button(action: saveToFiles) {
                             Label("Save to Files", systemImage: "folder")
                         }
-
+                        
                         Button(action: { showExportOptions = true }) {
                             Label("Export Options", systemImage: "doc.on.doc")
                         }
@@ -48,7 +52,7 @@ struct EnhancedPDFPreviewView: View {
                 }
         }
     }
-
+    
     private func saveToFiles() {
         showExportOptions = true
     }
@@ -56,10 +60,10 @@ struct EnhancedPDFPreviewView: View {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
-
+    
     func makeUIViewController(context: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
-
+    
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

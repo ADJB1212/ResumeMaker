@@ -1,8 +1,12 @@
+//
+//  Created by Andrew Jaffe © 2025
+//
+
 import SwiftUI
 
 struct ExperienceRow: View {
     let experience: ResumeModel.Experience
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(experience.title)
@@ -15,7 +19,7 @@ struct ExperienceRow: View {
         }
         .padding(.vertical, 4)
     }
-
+    
     private func formatDateRange(start: Date, end: Date?) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM yyyy"
@@ -27,7 +31,7 @@ struct ExperienceRow: View {
 
 struct EducationRow: View {
     let education: ResumeModel.Education
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(education.degree)
@@ -45,7 +49,7 @@ struct EducationRow: View {
         }
         .padding(.vertical, 4)
     }
-
+    
     private func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM yyyy"

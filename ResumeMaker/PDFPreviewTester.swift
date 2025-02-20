@@ -1,9 +1,14 @@
+//
+//  Created by Andrew Jaffe © 2025
+//
+
 import PDFKit
 import SwiftUI
 
 struct PDFPreviewTester: View {
     @State private var pdfData: Data?
-
+    var colorPal: ColorPalette = ColorPalette.palettes[3]
+    
     var body: some View {
         VStack {
             if let pdfData = pdfData {
@@ -16,7 +21,7 @@ struct PDFPreviewTester: View {
             generateSamplePDF()
         }
     }
-
+    
     private func generateSamplePDF() {
         let sampleResume = ResumeModel(
             personalInfo: ResumeModel.PersonalInfo(
@@ -86,8 +91,8 @@ struct PDFPreviewTester: View {
                 "AWS",
             ]
         )
-
-        let pdfCreator = PDFGenerator(resume: sampleResume)
+        
+        let pdfCreator = PDFGenerator(resume: sampleResume, colorPalette: colorPal)
         self.pdfData = pdfCreator.generatePDF()
     }
     private func generateEdgeCasesPDF() {
@@ -120,8 +125,8 @@ struct PDFPreviewTester: View {
             ],
             skills: Array(repeating: "Very Long Skill Name That Might Break Layout", count: 20)
         )
-
-        let pdfCreator = PDFGenerator(resume: edgeCaseResume)
+        
+        let pdfCreator = PDFGenerator(resume: edgeCaseResume, colorPalette: colorPal)
         self.pdfData = pdfCreator.generatePDF()
     }
 }

@@ -1,8 +1,12 @@
+//
+//  Created by Andrew Jaffe © 2025
+//
+
 import SwiftUI
 
 struct PersonalInfoView: View {
     @ObservedObject var viewModel: ResumeViewModel
-
+    
     var body: some View {
         Form {
             Section(header: Text("Basic Information")) {
@@ -13,17 +17,27 @@ struct PersonalInfoView: View {
                     .keyboardType(.phonePad)
                 TextField("Location", text: $viewModel.resume.personalInfo.location)
             }
-
+            
             Section(header: Text("Professional Profile")) {
-                TextField(
-                    "LinkedIn URL",
-                    text: Binding(
-                        get: { viewModel.resume.personalInfo.linkedIn ?? "" },
-                        set: { viewModel.resume.personalInfo.linkedIn = $0.isEmpty ? nil : $0 }
-                    ))
-
-                TextEditor(text: $viewModel.resume.personalInfo.summary)
-                    .frame(height: 100)
+                ZStack(alignment: .leading){
+                    if viewModel.resume.personalInfo.summary.isEmpty{
+                        VStack{
+                            Text("Write your professional summary...")
+                                .opacity(0.5)
+                                .disabled(true)
+                                .foregroundStyle(Color(.gray))
+                                .padding(.top, 10)
+                                .padding(.leading, 6)
+                            Spacer()
+                            
+                        }
+                    }
+                    VStack{
+                        TextEditor(text: $viewModel.resume.personalInfo.summary)
+                            .frame(height: 100)
+                        Spacer()
+                    }
+                }
             }
         }
         .navigationTitle("Personal Information")
@@ -33,14 +47,14 @@ struct PersonalInfoView: View {
 struct AddExperienceView: View {
     @ObservedObject var viewModel: ResumeViewModel
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var title = ""
     @State private var company = ""
     @State private var startDate = Date()
     @State private var endDate: Date? = nil
     @State private var description = ""
     @State private var isCurrentJob = false
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -48,7 +62,7 @@ struct AddExperienceView: View {
                     TextField("Job Title", text: $title)
                     TextField("Company", text: $company)
                 }
-
+                
                 Section(header: Text("Dates")) {
                     DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
                     Toggle("Current Position", isOn: $isCurrentJob)
@@ -61,7 +75,7 @@ struct AddExperienceView: View {
                             ), displayedComponents: .date)
                     }
                 }
-
+                
                 Section(header: Text("Description")) {
                     TextEditor(text: $description)
                         .frame(height: 100)
@@ -81,7 +95,7 @@ struct AddExperienceView: View {
                     viewModel.addExperience(experience)
                     dismiss()
                 }
-                .disabled(title.isEmpty || company.isEmpty || description.isEmpty)
+                    .disabled(title.isEmpty || company.isEmpty || description.isEmpty)
             )
         }
     }
@@ -90,12 +104,12 @@ struct AddExperienceView: View {
 struct AddEducationView: View {
     @ObservedObject var viewModel: ResumeViewModel
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var degree = ""
     @State private var institution = ""
     @State private var graduationDate = Date()
     @State private var gpa = ""
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -103,7 +117,7 @@ struct AddEducationView: View {
                     TextField("Degree", text: $degree)
                     TextField("Institution", text: $institution)
                 }
-
+                
                 Section(header: Text("Graduation")) {
                     DatePicker(
                         "Graduation Date", selection: $graduationDate, displayedComponents: .date)
@@ -124,7 +138,7 @@ struct AddEducationView: View {
                     viewModel.addEducation(education)
                     dismiss()
                 }
-                .disabled(degree.isEmpty || institution.isEmpty)
+                    .disabled(degree.isEmpty || institution.isEmpty)
             )
         }
     }
@@ -133,7 +147,7 @@ struct AddEducationView: View {
 struct SkillsView: View {
     @ObservedObject var viewModel: ResumeViewModel
     @State private var newSkill = ""
-
+    
     var body: some View {
         List {
             Section(header: Text("Add New Skill")) {
@@ -145,7 +159,7 @@ struct SkillsView: View {
                     .disabled(newSkill.isEmpty)
                 }
             }
-
+            
             Section(header: Text("Current Skills")) {
                 ForEach(viewModel.resume.skills, id: \.self) { skill in
                     Text(skill)
@@ -155,13 +169,14 @@ struct SkillsView: View {
         }
         .navigationTitle("Skills")
     }
-
+    
     private func addSkill() {
         viewModel.resume.skills.append(newSkill)
         newSkill = ""
     }
-
+    
     private func deleteSkills(at offsets: IndexSet) {
         viewModel.resume.skills.remove(atOffsets: offsets)
     }
 }
+
