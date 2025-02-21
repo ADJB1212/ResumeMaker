@@ -25,6 +25,7 @@ xcuserdata/
 *.moved-aside
 DerivedData
 *.hmap
+icons/
 *.ipa
 .build/
 *.xcuserstate
